@@ -1,4 +1,5 @@
 package view.dashboard;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -13,14 +14,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
 public class UserManagement extends javax.swing.JPanel {
     public UserManagement() {
         initComponents();
         setupActions();
         loadTable();
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+
     private void initComponents() {
         userManagement = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -54,30 +58,30 @@ public class UserManagement extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)))
-                .addContainerGap(828, Short.MAX_VALUE))
+        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+        .addGap(31, 31, 31)
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jLabel1)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+        .addComponent(jLabel2)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jLabel3)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jLabel4)))
+        .addContainerGap(828, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addContainerGap(21, Short.MAX_VALUE))
+        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(2, 2, 2)
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(jLabel2)
+        .addComponent(jLabel3)
+        .addComponent(jLabel4))
+        .addContainerGap(21, Short.MAX_VALUE))
         );
         btnTambah.setBackground(new java.awt.Color(0, 51, 255));
         btnTambah.setFont(new java.awt.Font("Segoe UI", 1, 12));
@@ -93,91 +97,92 @@ public class UserManagement extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCari)
-                .addGap(0, 0, Short.MAX_VALUE))
+        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel2Layout.createSequentialGroup()
+        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(btnCari)
+        .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(txtCari, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(txtCari, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         tableUser.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-            },
-            new String [] {
-                "No", "ID", "Username", "Nama Lengkap", "Role", "Status", "Dibuat"
-            }
+        new Object [][] {
+        },
+        new String [] {
+            "No", "ID", "Username", "Nama Lengkap", "Role", "Status", "Dibuat"
+        }
         ));
         jScrollPane7.setViewportView(tableUser);
         javax.swing.GroupLayout panelCard7Layout = new javax.swing.GroupLayout(panelCard7);
         panelCard7.setLayout(panelCard7Layout);
         panelCard7Layout.setHorizontalGroup(
-            panelCard7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCard7Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(panelCard7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelCard7Layout.createSequentialGroup()
-                        .addComponent(btnTambah)
-                        .addGap(12, 12, 12)
-                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnHapus)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(49, Short.MAX_VALUE))
+        panelCard7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(panelCard7Layout.createSequentialGroup()
+        .addGap(30, 30, 30)
+        .addGroup(panelCard7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(panelCard7Layout.createSequentialGroup()
+        .addComponent(btnTambah)
+        .addGap(12, 12, 12)
+        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(btnHapus)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addContainerGap(49, Short.MAX_VALUE))
         );
         panelCard7Layout.setVerticalGroup(
-            panelCard7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCard7Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(panelCard7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelCard7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnTambah)
-                        .addComponent(btnEdit)
-                        .addComponent(btnHapus)))
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        panelCard7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(panelCard7Layout.createSequentialGroup()
+        .addGap(29, 29, 29)
+        .addGroup(panelCard7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGroup(panelCard7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(btnTambah)
+        .addComponent(btnEdit)
+        .addComponent(btnHapus)))
+        .addGap(10, 10, 10)
+        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(panelCard7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGroup(jPanel3Layout.createSequentialGroup()
+        .addGap(23, 23, 23)
+        .addComponent(panelCard7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(45, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(panelCard7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel3Layout.createSequentialGroup()
+        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(18, 18, 18)
+        .addComponent(panelCard7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addContainerGap())
         );
         javax.swing.GroupLayout userManagementLayout = new javax.swing.GroupLayout(userManagement);
         userManagement.setLayout(userManagementLayout);
         userManagementLayout.setHorizontalGroup(
-            userManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(userManagementLayout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        userManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(userManagementLayout.createSequentialGroup()
+        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(0, 0, Short.MAX_VALUE))
         );
         userManagementLayout.setVerticalGroup(
-            userManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        userManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         add(userManagement, "card2");
     }// </editor-fold>//GEN-END:initComponents
+
     private void setupActions() {
         txtCari.setText("");
         tableUser.setForeground(Color.BLACK);
@@ -191,7 +196,9 @@ public class UserManagement extends javax.swing.JPanel {
         btnCari.addActionListener(e -> loadTable(txtCari.getText().trim()));
         txtCari.addActionListener(e -> loadTable(txtCari.getText().trim()));
         tableUser.addMouseListener(new java.awt.event.MouseAdapter() {
+
             @Override
+
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 2) {
                     showUserDialog(true);
@@ -199,25 +206,29 @@ public class UserManagement extends javax.swing.JPanel {
             }
         });
     }
+
     public void loadTable() {
         loadTable("");
     }
+
     public void loadTable(String keyword) {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"No", "ID", "Username", "Nama Lengkap", "Role", "Status", "Dibuat"},
-                0
+        new Object[]{"No", "ID", "Username", "Nama Lengkap", "Role", "Status", "Dibuat"},
+        0
         ) {
+
             @Override
+
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         String sql = "SELECT id, username, nama_lengkap, role, status, created_at "
-                + "FROM users "
-                + "WHERE username LIKE ? OR nama_lengkap LIKE ? OR role LIKE ? OR status LIKE ? "
-                + "ORDER BY id ASC";
+        + "FROM users "
+        + "WHERE username LIKE ? OR nama_lengkap LIKE ? OR role LIKE ? OR status LIKE ? "
+        + "ORDER BY id ASC";
         try (Connection conn = config.koneksi.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        PreparedStatement ps = conn.prepareStatement(sql)) {
             String like = "%" + keyword + "%";
             ps.setString(1, like);
             ps.setString(2, like);
@@ -242,6 +253,7 @@ public class UserManagement extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Gagal memuat data user: " + e.getMessage());
         }
     }
+
     private void showUserDialog(boolean editMode) {
         int selectedRow = tableUser.getSelectedRow();
         if (editMode && selectedRow < 0) {
@@ -271,11 +283,11 @@ public class UserManagement extends javax.swing.JPanel {
         addFormRow(form, gbc, 3, "Role", role);
         addFormRow(form, gbc, 4, "Status", status);
         int result = JOptionPane.showConfirmDialog(
-                this,
-                form,
-                editMode ? "Edit User" : "Tambah User",
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE
+        this,
+        form,
+        editMode ? "Edit User" : "Tambah User",
+        JOptionPane.OK_CANCEL_OPTION,
+        JOptionPane.PLAIN_MESSAGE
         );
         if (result != JOptionPane.OK_OPTION) {
             return;
@@ -294,6 +306,7 @@ public class UserManagement extends javax.swing.JPanel {
             insertUser(username, password, namaLengkap, role, status);
         }
     }
+
     private void addFormRow(JPanel form, GridBagConstraints gbc, int row, String label, java.awt.Component input) {
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -304,14 +317,14 @@ public class UserManagement extends javax.swing.JPanel {
         form.add(input, gbc);
     }
     private void insertUser(
-            JTextField username,
-            JTextField password,
-            JTextField namaLengkap,
-            JComboBox<String> role,
-            JComboBox<String> status) {
+    JTextField username,
+    JTextField password,
+    JTextField namaLengkap,
+    JComboBox<String> role,
+    JComboBox<String> status) {
         String sql = "INSERT INTO users (username, password, nama_lengkap, role, status) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = config.koneksi.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username.getText().trim());
             ps.setString(2, password.getText().trim());
             ps.setString(3, namaLengkap.getText().trim());
@@ -325,18 +338,18 @@ public class UserManagement extends javax.swing.JPanel {
         }
     }
     private void updateUser(
-            int userId,
-            JTextField username,
-            JTextField password,
-            JTextField namaLengkap,
-            JComboBox<String> role,
-            JComboBox<String> status) {
+    int userId,
+    JTextField username,
+    JTextField password,
+    JTextField namaLengkap,
+    JComboBox<String> role,
+    JComboBox<String> status) {
         boolean updatePassword = !password.getText().trim().isEmpty();
         String sql = updatePassword
-                ? "UPDATE users SET username = ?, password = ?, nama_lengkap = ?, role = ?, status = ? WHERE id = ?"
-                : "UPDATE users SET username = ?, nama_lengkap = ?, role = ?, status = ? WHERE id = ?";
+        ? "UPDATE users SET username = ?, password = ?, nama_lengkap = ?, role = ?, status = ? WHERE id = ?"
+        : "UPDATE users SET username = ?, nama_lengkap = ?, role = ?, status = ? WHERE id = ?";
         try (Connection conn = config.koneksi.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username.getText().trim());
             if (updatePassword) {
                 ps.setString(2, password.getText().trim());
@@ -357,6 +370,7 @@ public class UserManagement extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Gagal edit user: " + e.getMessage());
         }
     }
+
     private void deleteSelectedUser() {
         int row = tableUser.getSelectedRow();
         if (row < 0) {
@@ -366,16 +380,16 @@ public class UserManagement extends javax.swing.JPanel {
         int userId = Integer.parseInt(String.valueOf(tableUser.getValueAt(row, 1)));
         String username = String.valueOf(tableUser.getValueAt(row, 2));
         int confirm = JOptionPane.showConfirmDialog(
-                this,
-                "Hapus user " + username + "?",
-                "Konfirmasi Hapus",
-                JOptionPane.YES_NO_OPTION
+        this,
+        "Hapus user " + username + "?",
+        "Konfirmasi Hapus",
+        JOptionPane.YES_NO_OPTION
         );
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }
         try (Connection conn = config.koneksi.getConnection();
-             PreparedStatement ps = conn.prepareStatement("DELETE FROM users WHERE id = ?")) {
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM users WHERE id = ?")) {
             ps.setInt(1, userId);
             ps.executeUpdate();
             JOptionPane.showMessageDialog(this, "User berhasil dihapus.");

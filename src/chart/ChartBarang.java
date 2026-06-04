@@ -1,4 +1,5 @@
 package chart;
+
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,15 +14,17 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.data.category.DefaultCategoryDataset;
+
 public class ChartBarang {
+
     public static void tampilChart(JPanel panel) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         isiDatasetDariDatabase(dataset);
         JFreeChart chart = ChartFactory.createLineChart(
-                "Grafik Barang Masuk vs Barang Keluar",
-                "Hari",
-                "Jumlah",
-                dataset
+        "Grafik Barang Masuk vs Barang Keluar",
+        "Hari",
+        "Jumlah",
+        dataset
         );
         chart.setBackgroundPaint(Color.WHITE);
         CategoryPlot plot = chart.getCategoryPlot();
@@ -35,7 +38,7 @@ public class ChartBarang {
             rangeAxis.setRange(0, 10);
         }
         LineAndShapeRenderer renderer =
-                (LineAndShapeRenderer) plot.getRenderer();
+        (LineAndShapeRenderer) plot.getRenderer();
         renderer.setSeriesPaint(0, new Color(34,197,94));
         renderer.setSeriesPaint(1, new Color(239,68,68));
         renderer.setSeriesStroke(0, new BasicStroke(3f));
@@ -44,7 +47,7 @@ public class ChartBarang {
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setOpaque(false);
         chartPanel.setPreferredSize(
-                new java.awt.Dimension(485, 269)
+        new java.awt.Dimension(485, 269)
         );
         panel.removeAll();
         panel.setLayout(new BorderLayout());
@@ -52,6 +55,7 @@ public class ChartBarang {
         panel.revalidate();
         panel.repaint();
     }
+
     private static void isiDatasetDariDatabase(DefaultCategoryDataset dataset) {
         String[] hari = {"Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"};
         for (String namaHari : hari) {
@@ -61,6 +65,7 @@ public class ChartBarang {
         loadJumlahPerHari(dataset, "barangmasuk", "Barang Masuk");
         loadJumlahPerHari(dataset, "barangkeluar", "Barang Keluar");
     }
+
     private static double getMaxValue(DefaultCategoryDataset dataset) {
         double max = 0;
         for (int row = 0; row < dataset.getRowCount(); row++) {
@@ -73,13 +78,14 @@ public class ChartBarang {
         }
         return max;
     }
+
     private static void loadJumlahPerHari(DefaultCategoryDataset dataset, String tableName, String seriesName) {
         String sql = "SELECT DAYOFWEEK(tanggal) AS hari, COALESCE(SUM(jumlah), 0) AS total "
-                + "FROM " + tableName + " "
-                + "GROUP BY DAYOFWEEK(tanggal)";
+        + "FROM " + tableName + " "
+        + "GROUP BY DAYOFWEEK(tanggal)";
         try (Connection conn = config.koneksi.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 String namaHari = namaHari(rs.getInt("hari"));
                 dataset.setValue(rs.getInt("total"), seriesName, namaHari);
@@ -88,23 +94,24 @@ public class ChartBarang {
             System.out.println("Gagal memuat data grafik " + seriesName + ": " + e.getMessage());
         }
     }
+
     private static String namaHari(int dayOfWeek) {
         switch (dayOfWeek) {
             case 2:
-                return "Sen";
+            return "Sen";
             case 3:
-                return "Sel";
+            return "Sel";
             case 4:
-                return "Rab";
+            return "Rab";
             case 5:
-                return "Kam";
+            return "Kam";
             case 6:
-                return "Jum";
+            return "Jum";
             case 7:
-                return "Sab";
+            return "Sab";
             case 1:
             default:
-                return "Min";
+            return "Min";
         }
     }
 }

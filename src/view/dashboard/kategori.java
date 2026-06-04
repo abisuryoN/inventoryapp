@@ -1,9 +1,11 @@
 package view.dashboard;
+
 import component.TambahKategori;
 import config.koneksi;
 import java.awt.Color;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
+
 public class kategori extends javax.swing.JPanel {
     public kategori() {
         initComponents();
@@ -12,13 +14,14 @@ public class kategori extends javax.swing.JPanel {
         jTextField3.setForeground(Color.GRAY);
         loadDataToDatabase();
     }
-   public void loadDataToDatabase() {
+
+    public void loadDataToDatabase() {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable_Kategori.getModel();
-        model.setRowCount(0); 
+        model.setRowCount(0);
         String sql = "SELECT * FROM KategoriBarang WHERE status IN ('Aktif','Tidak Aktif')";
         try (java.sql.Connection conn = koneksi.getConnection();
-            java.sql.Statement st = conn.createStatement();
-            java.sql.ResultSet rs = st.executeQuery(sql)) {
+        java.sql.Statement st = conn.createStatement();
+        java.sql.ResultSet rs = st.executeQuery(sql)) {
             int no = 1;
             while (rs.next()) {
                 Object[] row = {
@@ -33,30 +36,33 @@ public class kategori extends javax.swing.JPanel {
         } catch (Exception e) {
             System.out.println("Error load data: " + e.getMessage());
         }
-   jTable_Kategori.getColumn("Status").setCellRenderer(new javax.swing.table.DefaultTableCellRenderer() {
-        public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (value != null) {
-                String status = value.toString().trim();
-                if (status.equalsIgnoreCase("Aktif")) {
-                    c.setForeground(new java.awt.Color(0, 153, 0));
-                } else if (status.equalsIgnoreCase("Tidak Aktif")) {
-                    c.setForeground(java.awt.Color.RED);
-                } else {
-                    c.setForeground(table.getForeground());
+        jTable_Kategori.getColumn("Status").setCellRenderer(new javax.swing.table.DefaultTableCellRenderer() {
+
+            public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (value != null) {
+                    String status = value.toString().trim();
+                    if (status.equalsIgnoreCase("Aktif")) {
+                        c.setForeground(new java.awt.Color(0, 153, 0));
+                    } else if (status.equalsIgnoreCase("Tidak Aktif")) {
+                        c.setForeground(java.awt.Color.RED);
+                    } else {
+                        c.setForeground(table.getForeground());
+                    }
                 }
+                if (isSelected) {
+                    c.setBackground(table.getSelectionBackground());
+                } else {
+                    c.setBackground(table.getBackground());
+                }
+                return c;
             }
-            if (isSelected) {
-                c.setBackground(table.getSelectionBackground());
-            } else {
-                c.setBackground(table.getBackground());
-            }
-            return c;
-        }
-    });
-   } 
+        });
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+
     private void initComponents() {
         jPanel2 = new javax.swing.JPanel();
         kategori = new javax.swing.JPanel();
@@ -77,12 +83,12 @@ public class kategori extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 100, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 100, Short.MAX_VALUE)
         );
         setLayout(new java.awt.CardLayout());
         kategori.setBackground(new java.awt.Color(204, 204, 204));
@@ -104,37 +110,38 @@ public class kategori extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+        .addGap(31, 31, 31)
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jLabel1)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jLabel4)))
+        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(2, 2, 2)
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addComponent(jLabel4))
+        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addContainerGap(21, Short.MAX_VALUE))
         );
         jButtonEdit.setBackground(new java.awt.Color(255, 153, 0));
         jButtonEdit.setFont(new java.awt.Font("Segoe UI", 1, 12));
         jButtonEdit.setForeground(new java.awt.Color(255, 255, 255));
         jButtonEdit.setText("Edit");
         jButtonEdit.addActionListener(new java.awt.event.ActionListener() {
+
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEditActionPerformed(evt);
             }
@@ -143,6 +150,7 @@ public class kategori extends javax.swing.JPanel {
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("+Tambah Kategori");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
+
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
@@ -152,35 +160,39 @@ public class kategori extends javax.swing.JPanel {
         jButtonHapus.setForeground(new java.awt.Color(255, 255, 255));
         jButtonHapus.setText("Hapus");
         jButtonHapus.addActionListener(new java.awt.event.ActionListener() {
+
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonHapusActionPerformed(evt);
             }
         });
         jTable_Kategori.setForeground(new java.awt.Color(255, 255, 255));
         jTable_Kategori.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "No", "ID Kategori", "Nama Kategori", "Status", "Keterangan"
-            }
+        new Object [][] {
+            {null, null, null, null, null},
+            {null, null, null, null, null},
+            {null, null, null, null, null},
+            {null, null, null, null, null}
+        },
+        new String [] {
+            "No", "ID Kategori", "Nama Kategori", "Status", "Keterangan"
+        }
         ));
         jTable_Kategori.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
         jTable_Kategori.setGridColor(new java.awt.Color(255, 255, 255));
         jScrollPane1.setViewportView(jTable_Kategori);
         jTextField3.setText("Cari....");
         jTextField3.addFocusListener(new java.awt.event.FocusAdapter() {
+
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField3FocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextField3FocusLost(evt);
             }
         });
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField3KeyReleased(evt);
             }
@@ -188,171 +200,177 @@ public class kategori extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+        jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         javax.swing.GroupLayout panelCard1Layout = new javax.swing.GroupLayout(panelCard1);
         panelCard1.setLayout(panelCard1Layout);
         panelCard1Layout.setHorizontalGroup(
-            panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCard1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(panelCard1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jButtonHapus)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(49, Short.MAX_VALUE))
+        panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(panelCard1Layout.createSequentialGroup()
+        .addGap(30, 30, 30)
+        .addGroup(panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        .addGroup(panelCard1Layout.createSequentialGroup()
+        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(jButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(10, 10, 10)
+        .addComponent(jButtonHapus)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addContainerGap(49, Short.MAX_VALUE))
         );
         panelCard1Layout.setVerticalGroup(
-            panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCard1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(112, Short.MAX_VALUE))
+        panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(panelCard1Layout.createSequentialGroup()
+        .addGap(29, 29, 29)
+        .addGroup(panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGroup(panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(jButtonEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(jButtonHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        .addGap(10, 10, 10)
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(112, Short.MAX_VALUE))
         );
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(panelCard1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGroup(jPanel3Layout.createSequentialGroup()
+        .addGap(23, 23, 23)
+        .addComponent(panelCard1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(45, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(panelCard1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel3Layout.createSequentialGroup()
+        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(18, 18, 18)
+        .addComponent(panelCard1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addContainerGap())
         );
         javax.swing.GroupLayout kategoriLayout = new javax.swing.GroupLayout(kategori);
         kategori.setLayout(kategoriLayout);
         kategoriLayout.setHorizontalGroup(
-            kategoriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(kategoriLayout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        kategoriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(kategoriLayout.createSequentialGroup()
+        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(0, 0, Short.MAX_VALUE))
         );
         kategoriLayout.setVerticalGroup(
-            kategoriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        kategoriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         add(kategori, "card2");
     }// </editor-fold>//GEN-END:initComponents
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         TambahKategori tb =
         new TambahKategori(null, true);
         tb.setVisible(true);
         loadDataToDatabase();
     }//GEN-LAST:event_jButton1ActionPerformed
+
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
-    int baris = jTable_Kategori.getSelectedRow();
-    if (baris == -1) {
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Pilih data terlebih dahulu!"
-        );
-        return;
-    }
-    String id =
-            jTable_Kategori.getValueAt(baris, 1).toString();
-    String nama =
-            jTable_Kategori.getValueAt(baris, 2).toString();
-    String status =
-            jTable_Kategori.getValueAt(baris, 3).toString();
-    String keterangan =
-            jTable_Kategori.getValueAt(baris, 4).toString();
-    TambahKategori tb =
-            new TambahKategori(null, true);
-    tb.setDataEdit(
-            id,
-            nama,
-            keterangan,
-            status
-    );
-    tb.setVisible(true);
-    loadDataToDatabase();
-    }//GEN-LAST:event_jButtonEditActionPerformed
-    private void jButtonHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHapusActionPerformed
-    int baris = jTable_Kategori.getSelectedRow();
-    if (baris == -1) {
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Pilih data terlebih dahulu!"
-        );
-        return;
-    }
-    int konfirmasi =
-            javax.swing.JOptionPane.showConfirmDialog(
-                    this,
-                    "Yakin ingin menghapus kategori ini?",
-                    "Konfirmasi",
-                    javax.swing.JOptionPane.YES_NO_OPTION
-            );
-    if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
-        try {
-            String id =
-                    jTable_Kategori.getValueAt(baris, 1).toString();
-            java.sql.Connection conn =
-                    koneksi.getConnection();
-            String sql =
-                    "DELETE FROM KategoriBarang WHERE id=?";
-            java.sql.PreparedStatement ps =
-                    conn.prepareStatement(sql);
-            ps.setString(1, id);
-            ps.executeUpdate();
+        int baris = jTable_Kategori.getSelectedRow();
+        if (baris == -1) {
             javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Data berhasil dihapus"
+            this,
+            "Pilih data terlebih dahulu!"
             );
-            loadDataToDatabase();
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    e.getMessage()
-            );
+            return;
         }
-    }
+        String id =
+        jTable_Kategori.getValueAt(baris, 1).toString();
+        String nama =
+        jTable_Kategori.getValueAt(baris, 2).toString();
+        String status =
+        jTable_Kategori.getValueAt(baris, 3).toString();
+        String keterangan =
+        jTable_Kategori.getValueAt(baris, 4).toString();
+        TambahKategori tb =
+        new TambahKategori(null, true);
+        tb.setDataEdit(
+        id,
+        nama,
+        keterangan,
+        status
+        );
+        tb.setVisible(true);
+        loadDataToDatabase();
+    }//GEN-LAST:event_jButtonEditActionPerformed
+
+    private void jButtonHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHapusActionPerformed
+        int baris = jTable_Kategori.getSelectedRow();
+        if (baris == -1) {
+            javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Pilih data terlebih dahulu!"
+            );
+            return;
+        }
+        int konfirmasi =
+        javax.swing.JOptionPane.showConfirmDialog(
+        this,
+        "Yakin ingin menghapus kategori ini?",
+        "Konfirmasi",
+        javax.swing.JOptionPane.YES_NO_OPTION
+        );
+        if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
+            try {
+                String id =
+                jTable_Kategori.getValueAt(baris, 1).toString();
+                java.sql.Connection conn =
+                koneksi.getConnection();
+                String sql =
+                "DELETE FROM KategoriBarang WHERE id=?";
+                java.sql.PreparedStatement ps =
+                conn.prepareStatement(sql);
+                ps.setString(1, id);
+                ps.executeUpdate();
+                javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Data berhasil dihapus"
+                );
+                loadDataToDatabase();
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(
+                this,
+                e.getMessage()
+                );
+            }
+        }
     }//GEN-LAST:event_jButtonHapusActionPerformed
+
     private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
-    TableRowSorter sorter =
+        TableRowSorter sorter =
         new TableRowSorter(jTable_Kategori.getModel());
-    jTable_Kategori.setRowSorter(sorter);
-    sorter.setRowFilter(
+        jTable_Kategori.setRowSorter(sorter);
+        sorter.setRowFilter(
         RowFilter.regexFilter(jTextField3.getText())
-    );
+        );
     }//GEN-LAST:event_jTextField3KeyReleased
+
     private void jTextField3FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField3FocusLost
         if (jTextField3.getText().trim().isEmpty()) {
-        jTextField3.setText("Cari kategori...");
-    }
+            jTextField3.setText("Cari kategori...");
+        }
     }//GEN-LAST:event_jTextField3FocusLost
+
     private void jTextField3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField3FocusGained
         if (jTextField3.getText().equals("Cari kategori...")) {
-        jTextField3.setText("");
-        jTextField3.setForeground(Color.BLACK);
-    }
+            jTextField3.setText("");
+            jTextField3.setForeground(Color.BLACK);
+        }
     }//GEN-LAST:event_jTextField3FocusGained
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

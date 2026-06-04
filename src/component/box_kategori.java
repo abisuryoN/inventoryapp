@@ -1,4 +1,5 @@
 package component;
+
 class box_kategori {
     static Object getSelectedItem() {
         throw new UnsupportedOperationException("Not supported yet.");
