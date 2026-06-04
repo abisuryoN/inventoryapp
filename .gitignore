@@ -1,0 +1,28 @@
+# Build output
+/build/
+/dist/
+/target/
+
+# Compiled Java files
+*.class
+
+# NetBeans private config
+/nbproject/private/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE tambahan
+.idea/
+.vscode/
+*.iml
+
+# Database lokal / backup
+database/*.db
+database/*.sqlite
+database/*backup*.sql
+database/*dump*.sql
