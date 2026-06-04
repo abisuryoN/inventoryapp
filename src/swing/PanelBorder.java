@@ -1,21 +1,15 @@
 package swing;
-
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-
-
 public class PanelBorder extends javax.swing.JPanel {
-
     public PanelBorder() {
         initComponents();
         setOpaque(false);
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -27,7 +21,6 @@ public class PanelBorder extends javax.swing.JPanel {
             .addGap(0, 448, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
  @Override
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
@@ -36,7 +29,6 @@ public class PanelBorder extends javax.swing.JPanel {
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         super.paintComponent(grphcs);
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

@@ -1,5 +1,4 @@
 package view.dashboard;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -14,19 +13,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
 public class UserManagement extends javax.swing.JPanel {
-
     public UserManagement() {
         initComponents();
         setupActions();
         loadTable();
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         userManagement = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -43,28 +38,19 @@ public class UserManagement extends javax.swing.JPanel {
         btnCari = new javax.swing.JButton();
         jScrollPane7 = new javax.swing.JScrollPane();
         tableUser = new javax.swing.JTable();
-
         setLayout(new java.awt.CardLayout());
-
         userManagement.setBackground(new java.awt.Color(204, 204, 204));
-
         jPanel3.setBackground(new java.awt.Color(204, 204, 204));
-
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18));
         jLabel1.setText("User Management");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14));
         jLabel2.setForeground(new java.awt.Color(0, 51, 255));
         jLabel2.setText("Dashboard");
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18));
         jLabel3.setText(">");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14));
         jLabel4.setText("User Management");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -93,22 +79,17 @@ public class UserManagement extends javax.swing.JPanel {
                     .addComponent(jLabel4))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
-
         btnTambah.setBackground(new java.awt.Color(0, 51, 255));
-        btnTambah.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnTambah.setFont(new java.awt.Font("Segoe UI", 1, 12));
         btnTambah.setForeground(new java.awt.Color(255, 255, 255));
         btnTambah.setText("+ Tambah User");
-
         btnEdit.setBackground(new java.awt.Color(255, 153, 0));
-        btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 12));
         btnEdit.setText("Edit");
-
         btnHapus.setBackground(new java.awt.Color(255, 0, 0));
-        btnHapus.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnHapus.setFont(new java.awt.Font("Segoe UI", 1, 12));
         btnHapus.setText("Hapus");
-
         btnCari.setText("Cari");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -125,17 +106,14 @@ public class UserManagement extends javax.swing.JPanel {
                 .addComponent(txtCari, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
                 .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-
         tableUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
             },
             new String [] {
                 "No", "ID", "Username", "Nama Lengkap", "Role", "Status", "Dibuat"
             }
         ));
         jScrollPane7.setViewportView(tableUser);
-
         javax.swing.GroupLayout panelCard7Layout = new javax.swing.GroupLayout(panelCard7);
         panelCard7.setLayout(panelCard7Layout);
         panelCard7Layout.setHorizontalGroup(
@@ -168,7 +146,6 @@ public class UserManagement extends javax.swing.JPanel {
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -187,7 +164,6 @@ public class UserManagement extends javax.swing.JPanel {
                 .addComponent(panelCard7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
         javax.swing.GroupLayout userManagementLayout = new javax.swing.GroupLayout(userManagement);
         userManagement.setLayout(userManagementLayout);
         userManagementLayout.setHorizontalGroup(
@@ -200,10 +176,8 @@ public class UserManagement extends javax.swing.JPanel {
             userManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
         add(userManagement, "card2");
     }// </editor-fold>//GEN-END:initComponents
-
     private void setupActions() {
         txtCari.setText("");
         tableUser.setForeground(Color.BLACK);
@@ -211,7 +185,6 @@ public class UserManagement extends javax.swing.JPanel {
         tableUser.setSelectionBackground(new Color(30, 99, 242));
         tableUser.setRowHeight(28);
         tableUser.setShowGrid(false);
-
         btnTambah.addActionListener(e -> showUserDialog(false));
         btnEdit.addActionListener(e -> showUserDialog(true));
         btnHapus.addActionListener(e -> deleteSelectedUser());
@@ -226,11 +199,9 @@ public class UserManagement extends javax.swing.JPanel {
             }
         });
     }
-
     public void loadTable() {
         loadTable("");
     }
-
     public void loadTable(String keyword) {
         DefaultTableModel model = new DefaultTableModel(
                 new Object[]{"No", "ID", "Username", "Nama Lengkap", "Role", "Status", "Dibuat"},
@@ -241,21 +212,17 @@ public class UserManagement extends javax.swing.JPanel {
                 return false;
             }
         };
-
         String sql = "SELECT id, username, nama_lengkap, role, status, created_at "
                 + "FROM users "
                 + "WHERE username LIKE ? OR nama_lengkap LIKE ? OR role LIKE ? OR status LIKE ? "
                 + "ORDER BY id ASC";
-
         try (Connection conn = config.koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
             String like = "%" + keyword + "%";
             ps.setString(1, like);
             ps.setString(2, like);
             ps.setString(3, like);
             ps.setString(4, like);
-
             try (ResultSet rs = ps.executeQuery()) {
                 int no = 1;
                 while (rs.next()) {
@@ -270,26 +237,22 @@ public class UserManagement extends javax.swing.JPanel {
                     });
                 }
             }
-
             tableUser.setModel(model);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal memuat data user: " + e.getMessage());
         }
     }
-
     private void showUserDialog(boolean editMode) {
         int selectedRow = tableUser.getSelectedRow();
         if (editMode && selectedRow < 0) {
             JOptionPane.showMessageDialog(this, "Pilih user yang mau diedit.");
             return;
         }
-
         JTextField username = new JTextField(20);
         JTextField password = new JTextField(20);
         JTextField namaLengkap = new JTextField(20);
         JComboBox<String> role = new JComboBox<>(new String[]{"admin", "superadmin"});
         JComboBox<String> status = new JComboBox<>(new String[]{"Aktif", "Tidak Aktif"});
-
         int userId = -1;
         if (editMode) {
             userId = Integer.parseInt(String.valueOf(tableUser.getValueAt(selectedRow, 1)));
@@ -298,18 +261,15 @@ public class UserManagement extends javax.swing.JPanel {
             role.setSelectedItem(String.valueOf(tableUser.getValueAt(selectedRow, 4)));
             status.setSelectedItem(String.valueOf(tableUser.getValueAt(selectedRow, 5)));
         }
-
         JPanel form = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(6, 6, 6, 6);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
         addFormRow(form, gbc, 0, "Username", username);
         addFormRow(form, gbc, 1, editMode ? "Password Baru" : "Password", password);
         addFormRow(form, gbc, 2, "Nama Lengkap", namaLengkap);
         addFormRow(form, gbc, 3, "Role", role);
         addFormRow(form, gbc, 4, "Status", status);
-
         int result = JOptionPane.showConfirmDialog(
                 this,
                 form,
@@ -317,64 +277,53 @@ public class UserManagement extends javax.swing.JPanel {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE
         );
-
         if (result != JOptionPane.OK_OPTION) {
             return;
         }
-
         if (username.getText().trim().isEmpty() || namaLengkap.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Username dan nama lengkap wajib diisi.");
             return;
         }
-
         if (!editMode && password.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Password wajib diisi.");
             return;
         }
-
         if (editMode) {
             updateUser(userId, username, password, namaLengkap, role, status);
         } else {
             insertUser(username, password, namaLengkap, role, status);
         }
     }
-
     private void addFormRow(JPanel form, GridBagConstraints gbc, int row, String label, java.awt.Component input) {
         gbc.gridx = 0;
         gbc.gridy = row;
         gbc.weightx = 0;
         form.add(new JLabel(label), gbc);
-
         gbc.gridx = 1;
         gbc.weightx = 1;
         form.add(input, gbc);
     }
-
     private void insertUser(
             JTextField username,
             JTextField password,
             JTextField namaLengkap,
             JComboBox<String> role,
             JComboBox<String> status) {
-
         String sql = "INSERT INTO users (username, password, nama_lengkap, role, status) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = config.koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setString(1, username.getText().trim());
             ps.setString(2, password.getText().trim());
             ps.setString(3, namaLengkap.getText().trim());
             ps.setString(4, String.valueOf(role.getSelectedItem()));
             ps.setString(5, String.valueOf(status.getSelectedItem()));
             ps.executeUpdate();
-
             JOptionPane.showMessageDialog(this, "User berhasil ditambahkan.");
             loadTable(txtCari.getText().trim());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal tambah user: " + e.getMessage());
         }
     }
-
     private void updateUser(
             int userId,
             JTextField username,
@@ -382,15 +331,12 @@ public class UserManagement extends javax.swing.JPanel {
             JTextField namaLengkap,
             JComboBox<String> role,
             JComboBox<String> status) {
-
         boolean updatePassword = !password.getText().trim().isEmpty();
         String sql = updatePassword
                 ? "UPDATE users SET username = ?, password = ?, nama_lengkap = ?, role = ?, status = ? WHERE id = ?"
                 : "UPDATE users SET username = ?, nama_lengkap = ?, role = ?, status = ? WHERE id = ?";
-
         try (Connection conn = config.koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setString(1, username.getText().trim());
             if (updatePassword) {
                 ps.setString(2, password.getText().trim());
@@ -405,48 +351,39 @@ public class UserManagement extends javax.swing.JPanel {
                 ps.setInt(5, userId);
             }
             ps.executeUpdate();
-
             JOptionPane.showMessageDialog(this, "User berhasil diedit.");
             loadTable(txtCari.getText().trim());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal edit user: " + e.getMessage());
         }
     }
-
     private void deleteSelectedUser() {
         int row = tableUser.getSelectedRow();
         if (row < 0) {
             JOptionPane.showMessageDialog(this, "Pilih user yang mau dihapus.");
             return;
         }
-
         int userId = Integer.parseInt(String.valueOf(tableUser.getValueAt(row, 1)));
         String username = String.valueOf(tableUser.getValueAt(row, 2));
-
         int confirm = JOptionPane.showConfirmDialog(
                 this,
                 "Hapus user " + username + "?",
                 "Konfirmasi Hapus",
                 JOptionPane.YES_NO_OPTION
         );
-
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }
-
         try (Connection conn = config.koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement("DELETE FROM users WHERE id = ?")) {
-
             ps.setInt(1, userId);
             ps.executeUpdate();
-
             JOptionPane.showMessageDialog(this, "User berhasil dihapus.");
             loadTable(txtCari.getText().trim());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal hapus user: " + e.getMessage());
         }
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCari;
     private javax.swing.JButton btnEdit;

@@ -17,15 +17,12 @@
     </properties>
 
     <dependencies>
-
-        <!-- JCalendar untuk JDateChooser -->
         <dependency>
             <groupId>com.toedter</groupId>
             <artifactId>jcalendar</artifactId>
             <version>1.4</version>
         </dependency>
 
-        <!-- JDBC MySQL Connector -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
