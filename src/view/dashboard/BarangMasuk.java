@@ -15,32 +15,54 @@ public class BarangMasuk extends javax.swing.JPanel {
         jTable7.setSelectionBackground(new java.awt.Color(30, 99, 242));
         jTable7.setRowHeight(26);
         jTable7.setShowGrid(false);
+        jTable7.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        jScrollPane7.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        javax.swing.table.DefaultTableCellRenderer centerRenderer = new javax.swing.table.DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jTable7.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
+
+        setColumnWidth(0, 60);
+        setColumnWidth(1, 150);
+        setColumnWidth(2, 120);
+        setColumnWidth(3, 160);
+        setColumnWidth(4, 120);
+        setColumnWidth(5, 170);
+        setColumnWidth(6, 100);
+        setColumnWidth(7, 150);
+        setColumnWidth(8, 260);
+    }
+
+    private void setColumnWidth(int columnIndex, int width) {
+        javax.swing.table.TableColumn column = jTable7.getColumnModel().getColumn(columnIndex);
+        column.setMinWidth(width);
+        column.setPreferredWidth(width);
     }
 
     public void loadTable() {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable7.getModel();
         model.setRowCount(0);
-        String sql ="SELECT bm.*, b.name AS nama_barang, k.name AS kategori_barang, s.name AS nama_supplier " +
+        String sql ="SELECT bm.*, b.name AS nama_barang, s.name AS nama_supplier " +
         "FROM barangmasuk bm " +
         "JOIN databarang b ON bm.barang_id = b.id " +
-        "JOIN supplier s ON bm.supplier_id = s.id " +
-        "JOIN kategoribarang k ON b.kategori_id = k.id";
+        "JOIN supplier s ON bm.supplier_id = s.id";
         try (java.sql.Connection conn = config.koneksi.getConnection();
         java.sql.Statement st = conn.createStatement();
         java.sql.ResultSet rs = st.executeQuery(sql)) {
             int no = 1;
             while (rs.next()) {
+                int jumlah = rs.getInt("jumlah");
+                double harga = rs.getDouble("harga");
+                double totalHarga = jumlah * harga;
                 model.addRow(new Object[]{
                     no++,
                     rs.getString("tanggal"),
                     rs.getString("barang_id"),
                     rs.getString("nama_barang"),
-                    rs.getString("kategori_id"),
-                    rs.getString("kategori_barang"),
                     rs.getString("supplier_id"),
                     rs.getString("nama_supplier"),
-                    rs.getInt("jumlah"),
-                    "Rp 0",
+                    jumlah,
+                    "Rp " + String.format("%,.0f", totalHarga),
                     rs.getString("keterangan")
                 });
             }
