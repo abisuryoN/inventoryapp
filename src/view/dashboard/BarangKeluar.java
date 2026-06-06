@@ -2,8 +2,13 @@ package view.dashboard;
 
 import component.Barker;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import config.koneksi;
 
@@ -22,6 +27,10 @@ public class BarangKeluar extends javax.swing.JPanel {
         table_barangkeluar.setShowGrid(false);
     }
 
+    private String formatRupiah(double value) {
+        return "Rp " + String.format("%,.0f", value).replace(",", ".");
+    }
+
     public void tampilData(){
         DefaultTableModel model =
         new DefaultTableModel();
@@ -34,12 +43,13 @@ public class BarangKeluar extends javax.swing.JPanel {
         model.addColumn("No. Transaksi");
         model.addColumn("Penerima");
         model.addColumn("Keterangan");
+        model.addColumn("ID");
         try {
             int no = 1;
             Connection c = koneksi.getConnection();
             Statement s = c.createStatement();
             String sql =
-            "SELECT * FROM barangkeluar";
+            "SELECT * FROM barangkeluar ORDER BY tanggal DESC, id DESC";
             ResultSet r = s.executeQuery(sql);
             while(r.next()){
                 model.addRow(new Object[]{
@@ -48,15 +58,37 @@ public class BarangKeluar extends javax.swing.JPanel {
                     r.getString("kode_barang"),
                     r.getString("nama_barang"),
                     r.getString("qty"),
-                    r.getString("total_harga"),
+                    formatRupiah(r.getDouble("total_harga")),
                     r.getString("no_transaksi"),
                     r.getString("penerima"),
-                    r.getString("keterangan")
+                    r.getString("keterangan"),
+                    r.getInt("id")
                 });
             }
             table_barangkeluar.setModel(model);
+            setupTableStyle();
+            sembunyikanKolomId();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
+        }
+    }
+
+    private int getIdTransaksiTerpilih() {
+        int row = table_barangkeluar.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih data yang mau diproses!");
+            return -1;
+        }
+        int modelRow = table_barangkeluar.convertRowIndexToModel(row);
+        return Integer.parseInt(table_barangkeluar.getModel().getValueAt(modelRow, 9).toString());
+    }
+
+    private void sembunyikanKolomId() {
+        if (table_barangkeluar.getColumnModel().getColumnCount() > 9) {
+            javax.swing.table.TableColumn column = table_barangkeluar.getColumnModel().getColumn(9);
+            column.setMinWidth(0);
+            column.setPreferredWidth(0);
+            column.setMaxWidth(0);
         }
     }
 
@@ -294,10 +326,129 @@ public Class getColumnClass(int columnIndex) {
     }//GEN-LAST:event_jButton_ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        int id = getIdTransaksiTerpilih();
+        if (id < 0) {
+            return;
+        }
+        try (Connection conn = koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT qty, total_harga, penerima, keterangan FROM barangkeluar WHERE id = ?")) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "Data tidak ditemukan!");
+                return;
+            }
+            int qty = rs.getInt("qty");
+            double total = rs.getDouble("total_harga");
+            double hargaSatuan = qty == 0 ? 0 : total / qty;
+            JTextField txtQty = new JTextField(String.valueOf(qty));
+            JTextField txtHarga = new JTextField(String.valueOf(hargaSatuan));
+            JTextField txtPenerima = new JTextField(rs.getString("penerima"));
+            JTextArea txtKet = new JTextArea(rs.getString("keterangan"), 4, 20);
+            Object[] form = {"Kuantitas", txtQty, "Harga Satuan", txtHarga, "Nama Penerima", txtPenerima, "Keterangan", txtKet};
+            int result = JOptionPane.showConfirmDialog(this, form, "Edit Barang Keluar", JOptionPane.OK_CANCEL_OPTION);
+            if (result != JOptionPane.OK_OPTION) {
+                return;
+            }
+            int qtyBaru = Integer.parseInt(txtQty.getText().trim());
+            double hargaBaru = Double.parseDouble(txtHarga.getText().trim());
+            updateBarangKeluar(id, qtyBaru, hargaBaru * qtyBaru, txtPenerima.getText(), txtKet.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Kuantitas dan harga harus angka!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal edit: " + e.getMessage());
+        }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        int id = getIdTransaksiTerpilih();
+        if (id < 0) {
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this, "Hapus transaksi barang keluar ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+        Connection conn = null;
+        try {
+            conn = koneksi.getConnection();
+            conn.setAutoCommit(false);
+            PreparedStatement psSelect = conn.prepareStatement("SELECT barang_id, qty FROM barangkeluar WHERE id = ?");
+            psSelect.setInt(1, id);
+            ResultSet rs = psSelect.executeQuery();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "Data tidak ditemukan!");
+                conn.rollback();
+                return;
+            }
+            String barangId = rs.getString("barang_id");
+            int qty = rs.getInt("qty");
+            PreparedStatement psDelete = conn.prepareStatement("DELETE FROM barangkeluar WHERE id = ?");
+            psDelete.setInt(1, id);
+            psDelete.executeUpdate();
+            PreparedStatement psStok = conn.prepareStatement("UPDATE databarang SET stok = stok + ? WHERE id = ?");
+            psStok.setInt(1, qty);
+            psStok.setString(2, barangId);
+            psStok.executeUpdate();
+            conn.commit();
+            JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
+            tampilData();
+        } catch (Exception e) {
+            if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
+            JOptionPane.showMessageDialog(this, "Gagal hapus: " + e.getMessage());
+        }
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void updateBarangKeluar(int id, int qtyBaru, double totalHarga, String penerima, String keterangan) {
+        if (qtyBaru <= 0) {
+            JOptionPane.showMessageDialog(this, "Kuantitas harus lebih dari 0!");
+            return;
+        }
+        Connection conn = null;
+        try {
+            conn = koneksi.getConnection();
+            conn.setAutoCommit(false);
+            PreparedStatement psSelect = conn.prepareStatement("SELECT barang_id, qty FROM barangkeluar WHERE id = ?");
+            psSelect.setInt(1, id);
+            ResultSet rs = psSelect.executeQuery();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "Data tidak ditemukan!");
+                conn.rollback();
+                return;
+            }
+            String barangId = rs.getString("barang_id");
+            int qtyLama = rs.getInt("qty");
+            int tambahanKeluar = qtyBaru - qtyLama;
+            if (tambahanKeluar > 0) {
+                PreparedStatement psStokCek = conn.prepareStatement("SELECT stok FROM databarang WHERE id = ?");
+                psStokCek.setString(1, barangId);
+                ResultSet rsStok = psStokCek.executeQuery();
+                if (!rsStok.next() || rsStok.getInt("stok") < tambahanKeluar) {
+                    JOptionPane.showMessageDialog(this, "Stok tidak mencukupi untuk perubahan kuantitas!");
+                    conn.rollback();
+                    return;
+                }
+            }
+            PreparedStatement psUpdate = conn.prepareStatement("UPDATE barangkeluar SET jumlah = ?, qty = ?, total_harga = ?, penerima = ?, keterangan = ? WHERE id = ?");
+            psUpdate.setInt(1, qtyBaru);
+            psUpdate.setInt(2, qtyBaru);
+            psUpdate.setDouble(3, totalHarga);
+            psUpdate.setString(4, penerima);
+            psUpdate.setString(5, keterangan);
+            psUpdate.setInt(6, id);
+            psUpdate.executeUpdate();
+            PreparedStatement psStok = conn.prepareStatement("UPDATE databarang SET stok = stok - ? WHERE id = ?");
+            psStok.setInt(1, tambahanKeluar);
+            psStok.setString(2, barangId);
+            psStok.executeUpdate();
+            conn.commit();
+            JOptionPane.showMessageDialog(this, "Data berhasil diedit!");
+            tampilData();
+        } catch (Exception e) {
+            if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
+            JOptionPane.showMessageDialog(this, "Gagal edit: " + e.getMessage());
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Barker;
     private javax.swing.JButton jButton1;

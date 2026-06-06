@@ -1,30 +1,77 @@
 package component;
 
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import config.koneksi;
-import java.text.SimpleDateFormat;
 
 public class Barker extends javax.swing.JDialog {
     public Barker(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        kosongkanForm();
+        jButton_batal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dispose();
+            }
+        });
         setLocationRelativeTo(null);
         loadKodeBarang();
+    }
+
+    private void kosongkanForm() {
+        txt_namabarang.setText("");
+        txt_kuantitas.setText("");
+        txt_hargaSatuan.setText("");
+        txt_total.setText("");
+        txt_total.setEditable(false);
+        txt_transaksi.setText("TRX-" + System.currentTimeMillis());
+        txt_penerima.setText("");
+        txt_keterangan.setText("");
+    }
+
+    private void hitungTotalHarga() {
+        try {
+            double harga = parseHargaInput(txt_hargaSatuan.getText());
+            int qty = Integer.parseInt(txt_kuantitas.getText().trim());
+            txt_total.setText(formatRupiah(harga * qty));
+        } catch (NumberFormatException e) {
+            txt_total.setText("");
+        }
+    }
+
+    private String formatRupiah(double value) {
+        return "Rp " + String.format("%,.0f", value).replace(",", ".");
+    }
+
+    private double parseHargaInput(String input) {
+        String text = input.trim().toLowerCase().replace("rp", "").replace(" ", "");
+        boolean ribuan = text.endsWith("k");
+        if (ribuan) {
+            text = text.substring(0, text.length() - 1);
+        }
+        if (text.contains(",")) {
+            text = text.replace(".", "").replace(",", ".");
+        } else if (text.matches(".*\\.\\d{3}(\\.\\d{3})*$")) {
+            text = text.replace(".", "");
+        }
+        double value = Double.parseDouble(text);
+        return ribuan ? value * 1000 : value;
     }
 
     private void loadKodeBarang(){
         try {
             Connection c = koneksi.getConnection();
-            Statement s = c.createStatement();
-            String sql = "SELECT * FROM databarang";
-            ResultSet r = s.executeQuery(sql);
+            String sql = "SELECT id FROM databarang ORDER BY id";
+            PreparedStatement p = c.prepareStatement(sql);
+            ResultSet r = p.executeQuery();
+            cb_kodebarang.removeAllItems();
+            cb_kodebarang.addItem("-- Pilih Kode --");
             while(r.next()){
                 cb_kodebarang.addItem(
-                r.getString("kode_barang")
+                r.getString("id")
                 );
             }
         } catch (Exception e) {
@@ -51,6 +98,8 @@ public class Barker extends javax.swing.JDialog {
         txt_total = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txt_kuantitas = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        txt_hargaSatuan = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txt_namabarang = new javax.swing.JTextField();
         cb_kodebarang = new javax.swing.JComboBox<>();
@@ -103,6 +152,15 @@ public class Barker extends javax.swing.JDialog {
                 txt_kuantitasKeyReleased(evt);
             }
         });
+        jLabel10.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14));
+        jLabel10.setText("Harga Satuan");
+        txt_hargaSatuan.addKeyListener(new java.awt.event.KeyAdapter() {
+
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                hitungTotalHarga();
+            }
+        });
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14));
         jLabel3.setText("Kode Barang");
@@ -139,6 +197,7 @@ public class Barker extends javax.swing.JDialog {
         .addComponent(jLabel4)
         .addComponent(jLabel6)
         .addComponent(jLabel7)
+        .addComponent(jLabel10)
         .addComponent(jLabel3)
         .addComponent(jLabel8)
         .addComponent(jLabel9))
@@ -149,6 +208,7 @@ public class Barker extends javax.swing.JDialog {
         .addComponent(txt_transaksi)
         .addComponent(txt_total)
         .addComponent(txt_kuantitas, javax.swing.GroupLayout.Alignment.TRAILING)
+        .addComponent(txt_hargaSatuan)
         .addComponent(txt_namabarang)
         .addComponent(cb_kodebarang, 0, 234, Short.MAX_VALUE)
         .addComponent(txt_penerima)))
@@ -191,6 +251,10 @@ public class Barker extends javax.swing.JDialog {
         .addComponent(txt_kuantitas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addGap(18, 18, 18)
         .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(jLabel10)
+        .addComponent(txt_hargaSatuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addGap(18, 18, 18)
+        .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
         .addComponent(jLabel6)
         .addComponent(txt_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addGap(18, 18, 18)
@@ -230,19 +294,32 @@ public class Barker extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cb_kodebarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_kodebarangActionPerformed
+        if (cb_kodebarang.getSelectedIndex() <= 0) {
+            txt_namabarang.setText("");
+            return;
+        }
         try {
             Connection c = koneksi.getConnection();
-            Statement s = c.createStatement();
             String sql =
-            "SELECT * FROM barang "
-            + "WHERE kode_barang='"
-            + cb_kodebarang.getSelectedItem()
-            + "'";
-            ResultSet r = s.executeQuery(sql);
+            "SELECT name FROM databarang WHERE id = ?";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setString(1, cb_kodebarang.getSelectedItem().toString());
+            ResultSet r = p.executeQuery();
             while(r.next()){
                 txt_namabarang.setText(
-                r.getString("nama_barang")
+                r.getString("name")
                 );
+            }
+            String hargaSql = "SELECT harga FROM barangmasuk WHERE barang_id = ? ORDER BY tanggal DESC, id DESC LIMIT 1";
+            PreparedStatement psHarga = c.prepareStatement(hargaSql);
+            psHarga.setString(1, cb_kodebarang.getSelectedItem().toString());
+            ResultSet rsHarga = psHarga.executeQuery();
+            if (rsHarga.next()) {
+                txt_hargaSatuan.setText(formatRupiah(rsHarga.getDouble("harga")));
+                hitungTotalHarga();
+            } else {
+                txt_hargaSatuan.setText("");
+                txt_total.setText("");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(
@@ -256,45 +333,94 @@ public class Barker extends javax.swing.JDialog {
     }//GEN-LAST:event_txt_kuantitasActionPerformed
 
     private void txt_kuantitasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_kuantitasKeyReleased
-        try {
-            int harga =
-            Integer.parseInt(
-            txt_total.getText());
-            int qty =
-            Integer.parseInt(
-            txt_kuantitas.getText());
-            int total = harga * qty;
-            txt_total.setText(
-            String.valueOf(total));
-        } catch (Exception e) {
-            txt_total.setText("");
-        }
+        hitungTotalHarga();
     }//GEN-LAST:event_txt_kuantitasKeyReleased
 
     private void jButton_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_simpanActionPerformed
+        if (jDateChooser1.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Pilih tanggal!");
+            return;
+        }
+        if (cb_kodebarang.getSelectedIndex() <= 0) {
+            JOptionPane.showMessageDialog(this, "Pilih kode barang!");
+            return;
+        }
+        int qty;
+        double totalHarga;
         try {
-            Connection c = koneksi.getConnection();
+            qty = Integer.parseInt(txt_kuantitas.getText().trim());
+            totalHarga = parseHargaInput(txt_total.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Kuantitas dan total harga harus berupa angka!");
+            return;
+        }
+        if (qty <= 0) {
+            JOptionPane.showMessageDialog(this, "Kuantitas harus lebih dari 0!");
+            return;
+        }
+
+        Connection c = null;
+        try {
+            c = koneksi.getConnection();
+            c.setAutoCommit(false);
+            String kodeBarang = cb_kodebarang.getSelectedItem().toString();
+            String cekStokSql = "SELECT stok FROM databarang WHERE id = ?";
+            PreparedStatement psCek = c.prepareStatement(cekStokSql);
+            psCek.setString(1, kodeBarang);
+            ResultSet rs = psCek.executeQuery();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "Barang tidak ditemukan!");
+                c.rollback();
+                return;
+            }
+            int stok = rs.getInt("stok");
+            if (stok < qty) {
+                JOptionPane.showMessageDialog(this, "Stok tidak mencukupi. Stok tersedia: " + stok);
+                c.rollback();
+                return;
+            }
+
+            String noTransaksi = txt_transaksi.getText().trim();
+            if (noTransaksi.isEmpty()) {
+                noTransaksi = "TRX-" + System.currentTimeMillis();
+            }
             String sql =
-            "INSERT INTO barang_keluar "
-            + "(tanggal, kode_barang, nama_barang)"
-            + "VALUES (?,?,?)";
-            PreparedStatement p =
-            c.prepareStatement(sql);
-            SimpleDateFormat sdf =
-            new SimpleDateFormat("yyyy-MM-dd");
-            String tanggal =
-            sdf.format(jDateChooser1.getDate());
-            p.setString(1, tanggal);
-            p.setString(2,
-            cb_kodebarang.getSelectedItem().toString());
-            p.setString(3,
-            txt_namabarang.getText());
+            "INSERT INTO barangkeluar "
+            + "(tanggal, barang_id, nama_barang, jumlah, qty, total_harga, no_transaksi, penerima, keterangan, kode_barang) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setTimestamp(1, new java.sql.Timestamp(jDateChooser1.getDate().getTime()));
+            p.setString(2, kodeBarang);
+            p.setString(3, txt_namabarang.getText());
+            p.setInt(4, qty);
+            p.setInt(5, qty);
+            p.setDouble(6, totalHarga);
+            p.setString(7, noTransaksi);
+            p.setString(8, txt_penerima.getText());
+            p.setString(9, txt_keterangan.getText());
+            p.setString(10, kodeBarang);
             p.executeUpdate();
+
+            String updateStokSql = "UPDATE databarang SET stok = stok - ? WHERE id = ?";
+            PreparedStatement psUpdate = c.prepareStatement(updateStokSql);
+            psUpdate.setInt(1, qty);
+            psUpdate.setString(2, kodeBarang);
+            psUpdate.executeUpdate();
+
+            c.commit();
             JOptionPane.showMessageDialog(
             null,
             "Berhasil disimpan"
             );
+            dispose();
         } catch (Exception e) {
+            if (c != null) {
+                try {
+                    c.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
             JOptionPane.showMessageDialog(
             null,
             e.getMessage()
@@ -351,10 +477,12 @@ public class Barker extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JScrollPane jScrollPane1;
     private swing.PanelBorder panelBorder1;
     private javax.swing.JTextArea txt_keterangan;
     private javax.swing.JTextField txt_kuantitas;
+    private javax.swing.JTextField txt_hargaSatuan;
     private javax.swing.JTextField txt_namabarang;
     private javax.swing.JTextField txt_penerima;
     private javax.swing.JTextField txt_total;

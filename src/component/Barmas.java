@@ -3,15 +3,72 @@ package component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 
 public class Barmas extends javax.swing.JDialog {
     public Barmas(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        kosongkanPlaceholder();
+        loadKategori();
         loadSupplier();
         setLocationRelativeTo(null);
+    }
+
+    private void kosongkanPlaceholder() {
+        txt_namaBarang.setText("");
+        txt_namaBarang1.setText("");
+        txt_namaBarang2.setText("");
+        txt_namaBarang3.setText("");
+        txt_namaBarang4.setText("");
+        txt_harga.setText("");
+        txt_totalHarga.setText("");
+        txt_totalHarga.setEditable(false);
+    }
+
+    private void hitungTotalHarga() {
+        try {
+            double harga = parseHargaInput(txt_harga.getText());
+            int qty = Integer.parseInt(txt_namaBarang3.getText().trim());
+            txt_totalHarga.setText(formatRupiah(harga * qty));
+        } catch (NumberFormatException e) {
+            txt_totalHarga.setText("");
+        }
+    }
+
+    private String formatRupiah(double value) {
+        return "Rp " + String.format("%,.0f", value).replace(",", ".");
+    }
+
+    private double parseHargaInput(String input) {
+        String text = input.trim().toLowerCase().replace("rp", "").replace(" ", "");
+        boolean ribuan = text.endsWith("k");
+        if (ribuan) {
+            text = text.substring(0, text.length() - 1);
+        }
+        if (text.contains(",")) {
+            text = text.replace(".", "").replace(",", ".");
+        } else if (text.matches(".*\\.\\d{3}(\\.\\d{3})*$")) {
+            text = text.replace(".", "");
+        }
+        double value = Double.parseDouble(text);
+        return ribuan ? value * 1000 : value;
+    }
+
+    private void loadKategori() {
+        try {
+            java.sql.Connection conn = config.koneksi.getConnection();
+            String sql = "SELECT id FROM kategoribarang WHERE status = 'Aktif' ORDER BY id";
+            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+            java.sql.ResultSet rs = ps.executeQuery();
+            box_satuan2.removeAllItems();
+            box_satuan2.addItem("-- Pilih ID --");
+            while (rs.next()) {
+                box_satuan2.addItem(rs.getString("id"));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal load kategori: " + e.getMessage());
+        }
     }
 
     private void loadSupplier() {
@@ -57,6 +114,10 @@ public class Barmas extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         box_satuan2 = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
+        txt_harga = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        txt_totalHarga = new javax.swing.JTextField();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -129,6 +190,26 @@ public class Barmas extends javax.swing.JDialog {
                 txt_namaBarang3ActionPerformed(evt);
             }
         });
+        txt_namaBarang3.addKeyListener(new java.awt.event.KeyAdapter() {
+
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                hitungTotalHarga();
+            }
+        });
+        jLabel12.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14));
+        jLabel12.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel12.setText("Harga Satuan");
+        txt_harga.addKeyListener(new java.awt.event.KeyAdapter() {
+
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                hitungTotalHarga();
+            }
+        });
+        jLabel13.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 14));
+        jLabel13.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel13.setText("Total Harga");
         jLabel9.setBackground(new java.awt.Color(255, 255, 255));
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14));
         jLabel9.setForeground(new java.awt.Color(51, 51, 51));
@@ -180,11 +261,15 @@ public class Barmas extends javax.swing.JDialog {
         .addComponent(jLabel7)
         .addComponent(jLabel4)
         .addComponent(jLabel8)
+        .addComponent(jLabel12)
+        .addComponent(jLabel13)
         .addComponent(jLabel10)
         .addComponent(jLabel11))
         .addGap(39, 39, 39)
         .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addComponent(txt_namaBarang3, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+        .addComponent(txt_harga)
+        .addComponent(txt_totalHarga)
         .addComponent(txt_namaBarang)
         .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(txt_namaBarang1)
@@ -238,6 +323,14 @@ public class Barmas extends javax.swing.JDialog {
         .addComponent(jLabel8)
         .addComponent(txt_namaBarang3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addGap(18, 18, 18)
+        .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(jLabel12)
+        .addComponent(txt_harga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addGap(18, 18, 18)
+        .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(jLabel13)
+        .addComponent(txt_totalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addGap(18, 18, 18)
         .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(panelBorder1Layout.createSequentialGroup()
         .addComponent(jLabel9)
@@ -272,44 +365,63 @@ public class Barmas extends javax.swing.JDialog {
         String kodeBarang = txt_namaBarang.getText();
         String namaBarang = txt_namaBarang1.getText();
         String idSupplier = box_satuan1.getSelectedItem().toString();
+        String idKategori = box_satuan2.getSelectedItem().toString();
         String keterangan = jTextArea1.getText();
         int qty;
+        double harga;
         try {
             qty = Integer.parseInt(txt_namaBarang3.getText());
+            harga = parseHargaInput(txt_harga.getText());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Kuantitas harus berupa angka!");
+            JOptionPane.showMessageDialog(this, "Kuantitas dan harga satuan harus berupa angka!");
             return;
         }
         if (jDateChooser1.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Pilih tanggal!");
             return;
         }
+        if (kodeBarang.trim().isEmpty() || namaBarang.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Kode dan nama barang wajib diisi!");
+            return;
+        }
+        if (box_satuan2.getSelectedIndex() <= 0) {
+            JOptionPane.showMessageDialog(this, "Pilih kategori barang!");
+            return;
+        }
+        if (box_satuan1.getSelectedIndex() <= 0) {
+            JOptionPane.showMessageDialog(this, "Pilih supplier!");
+            return;
+        }
         Connection conn = null;
         try {
             conn = config.koneksi.getConnection();
             conn.setAutoCommit(false);
-            String cekSql = "SELECT count(*) FROM databarang WHERE id = ?";
+            String cekSql = "SELECT kategori_id FROM databarang WHERE id = ?";
             PreparedStatement psCek = conn.prepareStatement(cekSql);
             psCek.setString(1, kodeBarang);
             java.sql.ResultSet rs = psCek.executeQuery();
-            rs.next();
-            if (rs.getInt(1) == 0) {
+            if (!rs.next()) {
                 String sqlBaru = "INSERT INTO databarang (id, kategori_id, name, stok) VALUES (?, ?, ?, ?)";
                 PreparedStatement psBaru = conn.prepareStatement(sqlBaru);
                 psBaru.setString(1, kodeBarang);
-                psBaru.setString(2, "K01");
+                psBaru.setString(2, idKategori);
                 psBaru.setString(3, namaBarang);
                 psBaru.setInt(4, 0);
                 psBaru.executeUpdate();
+            } else if (!idKategori.equals(rs.getString("kategori_id"))) {
+                JOptionPane.showMessageDialog(this, "Kategori tidak sesuai dengan data barang yang sudah ada!");
+                conn.rollback();
+                return;
             }
-            String sqlMasuk = "INSERT INTO barangmasuk (no_transaksi, barang_id, supplier_id, tanggal, jumlah, keterangan) VALUES (?, ?, ?, ?, ?, ?)";
+            String sqlMasuk = "INSERT INTO barangmasuk (barang_id, kategori_id, supplier_id, tanggal, jumlah, harga, keterangan) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement psMasuk = conn.prepareStatement(sqlMasuk);
-            psMasuk.setString(1, "TRX-" + System.currentTimeMillis());
-            psMasuk.setString(2, kodeBarang);
+            psMasuk.setString(1, kodeBarang);
+            psMasuk.setString(2, idKategori);
             psMasuk.setString(3, idSupplier);
             psMasuk.setTimestamp(4, new java.sql.Timestamp(jDateChooser1.getDate().getTime()));
             psMasuk.setInt(5, qty);
-            psMasuk.setString(6, keterangan);
+            psMasuk.setDouble(6, harga);
+            psMasuk.setString(7, keterangan);
             psMasuk.executeUpdate();
             String sqlUpdateStok = "UPDATE databarang SET stok = stok + ? WHERE id = ?";
             PreparedStatement psUpdate = conn.prepareStatement(sqlUpdateStok);
@@ -358,6 +470,22 @@ public class Barmas extends javax.swing.JDialog {
     }//GEN-LAST:event_txt_namaBarang4ActionPerformed
 
     private void box_satuan2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_box_satuan2ActionPerformed
+        if (box_satuan2.getSelectedIndex() > 0) {
+            try {
+                java.sql.Connection conn = config.koneksi.getConnection();
+                String sql = "SELECT name FROM kategoribarang WHERE id = ?";
+                java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, box_satuan2.getSelectedItem().toString());
+                java.sql.ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    txt_namaBarang4.setText(rs.getString("name"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            txt_namaBarang4.setText("");
+        }
     }//GEN-LAST:event_box_satuan2ActionPerformed
 
     public static void main(String args[]) {
@@ -404,6 +532,8 @@ public class Barmas extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -419,5 +549,7 @@ public class Barmas extends javax.swing.JDialog {
     private javax.swing.JTextField txt_namaBarang2;
     private javax.swing.JTextField txt_namaBarang3;
     private javax.swing.JTextField txt_namaBarang4;
+    private javax.swing.JTextField txt_harga;
+    private javax.swing.JTextField txt_totalHarga;
     // End of variables declaration//GEN-END:variables
 }

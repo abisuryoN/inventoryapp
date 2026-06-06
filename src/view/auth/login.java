@@ -10,6 +10,17 @@ import view.dashboard.Dashboard;
 public class login extends javax.swing.JFrame {
     public login() {
         initComponents();
+        getRootPane().setDefaultButton(btnLogin);
+        txtUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPassword.requestFocusInWindow();
+            }
+        });
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogin.doClick();
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")

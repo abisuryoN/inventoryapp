@@ -1,6 +1,13 @@
 package view.dashboard;
 
 import component.Barmas;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class BarangMasuk extends javax.swing.JPanel {
     public BarangMasuk() {
@@ -40,12 +47,23 @@ public class BarangMasuk extends javax.swing.JPanel {
     }
 
     public void loadTable() {
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable7.getModel();
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("Tanggal");
+        model.addColumn("Kode Barang");
+        model.addColumn("Nama Barang");
+        model.addColumn("ID Supplier");
+        model.addColumn("Nama Supplier");
+        model.addColumn("Total Qty");
+        model.addColumn("Total Harga");
+        model.addColumn("Keterangan");
+        model.addColumn("ID");
         model.setRowCount(0);
         String sql ="SELECT bm.*, b.name AS nama_barang, s.name AS nama_supplier " +
         "FROM barangmasuk bm " +
         "JOIN databarang b ON bm.barang_id = b.id " +
-        "JOIN supplier s ON bm.supplier_id = s.id";
+        "JOIN supplier s ON bm.supplier_id = s.id " +
+        "ORDER BY bm.tanggal DESC, bm.id DESC";
         try (java.sql.Connection conn = config.koneksi.getConnection();
         java.sql.Statement st = conn.createStatement();
         java.sql.ResultSet rs = st.executeQuery(sql)) {
@@ -63,11 +81,34 @@ public class BarangMasuk extends javax.swing.JPanel {
                     rs.getString("nama_supplier"),
                     jumlah,
                     "Rp " + String.format("%,.0f", totalHarga),
-                    rs.getString("keterangan")
+                    rs.getString("keterangan"),
+                    rs.getInt("id")
                 });
             }
+            jTable7.setModel(model);
+            setupTableStyle();
+            sembunyikanKolomId();
         } catch (java.sql.SQLException e) {
             javax.swing.JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
+        }
+    }
+
+    private int getIdTransaksiTerpilih() {
+        int row = jTable7.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih data yang mau diproses!");
+            return -1;
+        }
+        int modelRow = jTable7.convertRowIndexToModel(row);
+        return Integer.parseInt(jTable7.getModel().getValueAt(modelRow, 9).toString());
+    }
+
+    private void sembunyikanKolomId() {
+        if (jTable7.getColumnModel().getColumnCount() > 9) {
+            javax.swing.table.TableColumn column = jTable7.getColumnModel().getColumn(9);
+            column.setMinWidth(0);
+            column.setPreferredWidth(0);
+            column.setMaxWidth(0);
         }
     }
 
@@ -279,10 +320,110 @@ public class BarangMasuk extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        int id = getIdTransaksiTerpilih();
+        if (id < 0) {
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this, "Hapus transaksi barang masuk ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+        Connection conn = null;
+        try {
+            conn = config.koneksi.getConnection();
+            conn.setAutoCommit(false);
+            PreparedStatement psSelect = conn.prepareStatement("SELECT barang_id, jumlah FROM barangmasuk WHERE id = ?");
+            psSelect.setInt(1, id);
+            ResultSet rs = psSelect.executeQuery();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "Data tidak ditemukan!");
+                conn.rollback();
+                return;
+            }
+            String barangId = rs.getString("barang_id");
+            int jumlah = rs.getInt("jumlah");
+            PreparedStatement psDelete = conn.prepareStatement("DELETE FROM barangmasuk WHERE id = ?");
+            psDelete.setInt(1, id);
+            psDelete.executeUpdate();
+            PreparedStatement psStok = conn.prepareStatement("UPDATE databarang SET stok = stok - ? WHERE id = ?");
+            psStok.setInt(1, jumlah);
+            psStok.setString(2, barangId);
+            psStok.executeUpdate();
+            conn.commit();
+            JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
+            loadTable();
+        } catch (Exception e) {
+            if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
+            JOptionPane.showMessageDialog(this, "Gagal hapus: " + e.getMessage());
+        }
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        int id = getIdTransaksiTerpilih();
+        if (id < 0) {
+            return;
+        }
+        try (Connection conn = config.koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT jumlah, harga, keterangan FROM barangmasuk WHERE id = ?")) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "Data tidak ditemukan!");
+                return;
+            }
+            JTextField txtQty = new JTextField(String.valueOf(rs.getInt("jumlah")));
+            JTextField txtHarga = new JTextField(String.valueOf(rs.getDouble("harga")));
+            JTextArea txtKet = new JTextArea(rs.getString("keterangan"), 4, 20);
+            Object[] form = {"Kuantitas", txtQty, "Harga Satuan", txtHarga, "Keterangan", txtKet};
+            int result = JOptionPane.showConfirmDialog(this, form, "Edit Barang Masuk", JOptionPane.OK_CANCEL_OPTION);
+            if (result != JOptionPane.OK_OPTION) {
+                return;
+            }
+            updateBarangMasuk(id, Integer.parseInt(txtQty.getText().trim()), Double.parseDouble(txtHarga.getText().trim()), txtKet.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Kuantitas dan harga harus angka!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal edit: " + e.getMessage());
+        }
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void updateBarangMasuk(int id, int qtyBaru, double hargaBaru, String keterangan) {
+        if (qtyBaru <= 0) {
+            JOptionPane.showMessageDialog(this, "Kuantitas harus lebih dari 0!");
+            return;
+        }
+        Connection conn = null;
+        try {
+            conn = config.koneksi.getConnection();
+            conn.setAutoCommit(false);
+            PreparedStatement psSelect = conn.prepareStatement("SELECT barang_id, jumlah FROM barangmasuk WHERE id = ?");
+            psSelect.setInt(1, id);
+            ResultSet rs = psSelect.executeQuery();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "Data tidak ditemukan!");
+                conn.rollback();
+                return;
+            }
+            String barangId = rs.getString("barang_id");
+            int qtyLama = rs.getInt("jumlah");
+            PreparedStatement psUpdate = conn.prepareStatement("UPDATE barangmasuk SET jumlah = ?, harga = ?, keterangan = ? WHERE id = ?");
+            psUpdate.setInt(1, qtyBaru);
+            psUpdate.setDouble(2, hargaBaru);
+            psUpdate.setString(3, keterangan);
+            psUpdate.setInt(4, id);
+            psUpdate.executeUpdate();
+            PreparedStatement psStok = conn.prepareStatement("UPDATE databarang SET stok = stok + ? WHERE id = ?");
+            psStok.setInt(1, qtyBaru - qtyLama);
+            psStok.setString(2, barangId);
+            psStok.executeUpdate();
+            conn.commit();
+            JOptionPane.showMessageDialog(this, "Data berhasil diedit!");
+            loadTable();
+        } catch (Exception e) {
+            if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
+            JOptionPane.showMessageDialog(this, "Gagal edit: " + e.getMessage());
+        }
+    }
 
     private void jButton_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ActionPerformed
         Barmas tb = new Barmas(null, true);
